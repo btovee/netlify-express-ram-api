@@ -5,19 +5,21 @@ const serverless = require('serverless-http');
 const app = express();
 const router = express.Router();
 const bodyParser = require('body-parser');
-const jsonParser = bodyParser.json()
+const jsonParser = bodyParser.json();
 const https = require('https');
 const characters = require('./responses/characters');
-const morty = require('./responses/morty')
+const morty = require('./responses/morty');
 
 const getIdFromRequest = (req) => {
   switch (req.method) {
     case 'POST':
     case 'PUT':
-      return req.body?.id;
+      return req.body.id;
     case 'GET':
     case 'DELETE':
-      return req.params?.id;
+      return req.params.id;
+    default:
+      return req.params.id;
   }
 }
 
@@ -30,7 +32,7 @@ const callApi = (req, res) => {
     });
     character.on('end', function () {
       let response = JSON.parse(body);
-      res.json(response)
+      res.json(response);
     });
   }).on('error', (e) => {
     console.error(e);
